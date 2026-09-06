@@ -12,3 +12,5 @@
 .back { border: none; background: var(--card); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 14px; font-size: 20px; cursor: pointer; color: var(--coffee); box-shadow: 0 6px 16px rgba(166,108,58,.08); }
 .back:active { transform: scale(.94); }
 .feature-title { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 700; margin: 0; color: var(--coffee); }
+.copy { border: none; background: var(--caramel); color: #fff; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; margin-left: 4px; }
+.copy:active { transform: scale(.94); }

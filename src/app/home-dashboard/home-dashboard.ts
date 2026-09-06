@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { HouseholdService } from '../household.service';
 import { FeatureCard } from '../feature-card/feature-card';
 import { OrderList } from '../order-list/order-list';
+import { MealCalendar } from '../meal-calendar/meal-calendar';
 
 @Component({
   selector: 'app-home-dashboard',
   standalone: true,
-  imports: [CommonModule, FeatureCard, OrderList],
+  imports: [CommonModule, FeatureCard, OrderList, MealCalendar],
   templateUrl: './home-dashboard.html',
   styleUrl: './home-dashboard.css',
 })
@@ -17,7 +18,7 @@ export class HomeDashboard implements OnInit, OnDestroy {
   private sub: any = null;
 
   // which view we're on: the home grid, or a specific feature
-  view: 'home' | 'orders' = 'home';
+  view: 'home' | 'orders' | 'meals' = 'home';
 
   constructor(private household: HouseholdService, private cdr: ChangeDetectorRef) {
     this.identity = this.household.getIdentity();
@@ -38,5 +39,13 @@ export class HomeDashboard implements OnInit, OnDestroy {
   }
 
   openOrders() { this.view = 'orders'; }
+  openMeals() { this.view = 'meals'; }
   goHome() { this.view = 'home'; }
+  copied = false;
+  copyCode() {
+    navigator.clipboard.writeText(this.identity.joinCode);
+    this.copied = true;
+    this.cdr.detectChanges();
+    setTimeout(() => { this.copied = false; this.cdr.detectChanges(); }, 1500);
+  }
 }

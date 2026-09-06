@@ -1,0 +1,38 @@
+<div class="meals">
+    @for (meal of meals; track meal) {
+      <div class="meal-card">
+        <div class="meal-head">
+          <span class="meal-name">{{ emoji[meal] }} {{ meal }}</span>
+          <span class="count">{{ countIn(meal) }} in · {{ countOut(meal) }} out</span>
+        </div>
+  
+        <div class="actions">
+            <div class="segment">
+              <button class="seg" [class.active-in]="amEating(meal)" (click)="setEating(meal, true)">In</button>
+              <button class="seg" [class.active-out]="!amEating(meal)" (click)="setEating(meal, false)">Out</button>
+            </div>
+            <button class="pref-btn" (click)="openPref(meal)">
+              {{ myMark(meal)?.preference ? '✎ ' + myMark(meal)?.preference : '+ preference' }}
+            </button>
+          </div>
+  
+        @if (countOut(meal) > 0) {
+          <p class="summary out">Out: {{ outNames(meal) }}</p>
+        }
+        @for (p of prefs(meal); track p.name) {
+          <p class="summary pref">{{ p.name }}: {{ p.text }}</p>
+        }
+      </div>
+    }
+  </div>
+  
+  @if (showPref) {
+    <div class="backdrop" (click)="cancelPref()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <p class="pq">{{ emoji[prefMeal] }} {{ prefMeal }} preference</p>
+        <input [(ngModel)]="prefText" placeholder="e.g. no onions, less spicy" />
+        <button class="btn primary" (click)="savePref()">Save</button>
+        <button class="btn link" (click)="cancelPref()">cancel</button>
+      </div>
+    </div>
+  }
