@@ -1,12 +1,59 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HouseholdService } from './household.service';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.html',
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('flatsync');
+  mode: 'choose' | 'create' | 'join' = 'choose';
+  householdName = '';
+  myName = '';
+  joinCode = '';
+  error = '';
+  busy = false;
+
+  identity: any = null;
+
+  constructor(private household: HouseholdService, private cdr: ChangeDetectorRef) {
+    this.identity = this.household.getIdentity();
+  }
+
+  async doCreate() {
+    if (!this.householdName.trim() || !this.myName.trim()) {
+      this.error = 'Please fill in both fields.';
+      return;
+    }
+    this.busy = true; this.error = '';
+    try {
+      this.identity = await this.household.createHousehold(this.householdName, this.myName);
+      this.cdr.detectChanges();
+    } catch (e: any) {
+      this.error = 'Something went wrong. Try again.';
+    } finally {
+      this.busy = false;
+    }
+  }
+
+  async doJoin() {
+    if (!this.joinCode.trim() || !this.myName.trim()) {
+      this.error = 'Please enter the code and your name.';
+      return;
+    }
+    this.busy = true; this.error = '';
+    try {
+      const result = await this.household.joinHousehold(this.joinCode, this.myName);
+      if (!result) { this.error = 'No household found with that code.'; }
+      else { this.identity = result; this.cdr.detectChanges(); }
+    } catch (e: any) {
+      this.error = 'Something went wrong. Try again.';
+    } finally {
+      this.busy = false;
+    }
+  }
 }
