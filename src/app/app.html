@@ -5,7 +5,43 @@
       <p class="hi">You're in <strong>{{ identity.householdName }}</strong>, {{ identity.name }} 👋</p>
       <p class="code-label">Share this code so flatmates can join:</p>
       <p class="code">{{ identity.joinCode }}</p>
-      <p class="soon">Order list & meal calendar coming next…</p>
+
+      <p class="members-label">In this flat ({{ members.length }})</p>
+      <ul class="members">
+        @for (m of members; track m.id) {
+          <li>{{ m.name }}</li>
+        }
+      </ul>
+
+      <div class="orders">
+        <p class="section-title">Order list</p>
+
+        <div class="add-row">
+          <input [(ngModel)]="newItem" (keyup.enter)="startAddItem()" placeholder="Add an item…" />
+          <button class="add-btn" (click)="startAddItem()">+</button>
+        </div>
+
+        @if (items.length === 0) {
+          <p class="empty">Nothing on the list yet.</p>
+        }
+
+        <ul class="item-list">
+          @for (item of items; track item.id) {
+            <li [class.done]="item.status === 'ordered'">
+              <span class="tag" [class.personal]="item.category === 'personal'">
+                {{ item.category }}
+              </span>
+              <span class="item-name">{{ item.name }}</span>
+              @if (item.status === 'needed') {
+                <button class="order-btn" (click)="orderItem(item)">order</button>
+              } @else {
+                <span class="ordered-label">✓ ordered</span>
+              }
+              <button class="del-btn" (click)="removeItem(item)">×</button>
+            </li>
+          }
+        </ul>
+      </div>
     </div>
   </main>
 } @else {
@@ -48,4 +84,15 @@
       </div>
     }
   </main>
+}
+
+@if (showCategoryPopup) {
+  <div class="popup-backdrop" (click)="cancelAddItem()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <p class="popup-q">"{{ pendingItem }}" is…</p>
+      <button class="primary" (click)="chooseCategory('common')">Common (shared)</button>
+      <button class="ghost" (click)="chooseCategory('personal')">Personal (mine)</button>
+      <button class="link" (click)="cancelAddItem()">cancel</button>
+    </div>
+  </div>
 }

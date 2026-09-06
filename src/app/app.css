@@ -14,3 +14,21 @@ button { border: none; border-radius: 12px; padding: 13px; font-size: 15px; font
 .code-label { text-align: center; font-size: 13px; color: #888; margin: 8px 0 0; }
 .code { text-align: center; font-size: 26px; font-weight: 800; letter-spacing: 4px; color: #6c5ce7; margin: 0; }
 .soon { text-align: center; font-size: 13px; color: #bbb; margin-top: 12px; }
+.section-title { text-align: center; font-size: 13px; color: #888; margin: 20px 0 8px; }
+.add-row { display: flex; gap: 8px; }
+.add-row input { flex: 1; }
+.add-btn { background: #6c5ce7; color: #fff; width: 46px; font-size: 22px; line-height: 1; }
+.empty { text-align: center; color: #bbb; font-size: 14px; margin: 12px 0; }
+.item-list { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 8px; }
+.item-list li { display: flex; align-items: center; gap: 8px; background: #faf9ff; border: 1px solid #efedff; border-radius: 12px; padding: 10px 12px; }
+.item-list li.done { opacity: 0.55; }
+.item-name { flex: 1; font-weight: 600; }
+.item-list li.done .item-name { text-decoration: line-through; }
+.tag { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; background: #e6f7ee; color: #1f9d55; padding: 3px 7px; border-radius: 6px; font-weight: 700; }
+.tag.personal { background: #fff0e6; color: #d9822b; }
+.order-btn { background: #6c5ce7; color: #fff; font-size: 12px; padding: 6px 12px; }
+.ordered-label { font-size: 12px; color: #1f9d55; font-weight: 700; }
+.del-btn { background: none; color: #ccc; font-size: 20px; padding: 0 4px; }
+.popup-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.popup { background: #fff; border-radius: 18px; padding: 24px; width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
+.popup-q { text-align: center; font-size: 16px; font-weight: 700; margin: 0 0 6px; }
