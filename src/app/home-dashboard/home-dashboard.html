@@ -41,6 +41,11 @@
         <app-feature-card title="Meal calendar" emoji="🍽️" subtitle="who's eating"
             (open)="openMeals()"></app-feature-card>
     </div>
+
+    <div class="settings">
+        <button class="settings-btn leave" (click)="askLeave()">Leave household</button>
+        <button class="settings-btn delete" (click)="askDelete()">Delete household</button>
+      </div>
     }
 
     @if (view === 'orders') {
@@ -60,5 +65,40 @@
     <app-meal-calendar [householdId]="identity.householdId" [memberId]="identity.memberId" [members]="members">
     </app-meal-calendar>
     }
+
+    @if (confirmMode === 'leave') {
+        <div class="backdrop" (click)="cancelConfirm()">
+          <div class="drama" (click)="$event.stopPropagation()">
+            <p class="drama-emoji">👋🥺</p>
+            <p class="drama-title">Leaving the flat?</p>
+            <p class="drama-line">The others will carry on without you. 🍽️</p>
+            <button class="btn danger-soft" (click)="doLeave()">Yes, I'm out 🚶</button>
+            <button class="btn link" (click)="cancelConfirm()">Stay</button>
+          </div>
+        </div>
+      }
+      
+      @if (confirmMode === 'delete') {
+        <div class="backdrop" (click)="cancelConfirm()">
+          <div class="drama" (click)="$event.stopPropagation()">
+            <p class="drama-emoji">💥😱</p>
+            <p class="drama-title">Point of no return</p>
+            <p class="drama-line">This wipes the <strong>whole flat</strong> for everyone. Forever. 🔥</p>
+            <button class="btn danger" (click)="doDelete()">Burn it all down 💀</button>
+            <button class="btn link" (click)="cancelConfirm()">Let's not 😅</button>
+          </div>
+        </div>
+      }
+
+      @if (confirmMode === 'deleted-notice') {
+        <div class="backdrop">
+          <div class="drama" (click)="$event.stopPropagation()">
+            <p class="drama-emoji">😳💨</p>
+            <p class="drama-title">Uh-oh…</p>
+            <p class="drama-line">This household was deleted by <strong>{{ deletedByName }}</strong>. Poof! 🪄</p>
+            <button class="btn danger-soft" (click)="acknowledgeDeleted()">OK</button>
+          </div>
+        </div>
+      }
 
 </main>

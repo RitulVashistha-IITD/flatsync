@@ -30,7 +30,7 @@
     <div class="backdrop" (click)="cancelPref()">
       <div class="popup" (click)="$event.stopPropagation()">
         <p class="pq">{{ emoji[prefMeal] }} {{ prefMeal }} preference</p>
-        <input [(ngModel)]="prefText" placeholder="e.g. no onions, less spicy" />
+        <input [(ngModel)]="prefText" placeholder="e.g. no onions, less spicy" maxlength="80" />
         <button class="btn primary" (click)="savePref()">Save</button>
         <button class="btn link" (click)="cancelPref()">cancel</button>
       </div>

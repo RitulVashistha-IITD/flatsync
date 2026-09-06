@@ -1,15 +1,15 @@
 .meals { display: flex; flex-direction: column; gap: 12px; }
 .meal-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
-.meal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.meal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
 .meal-name { font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 16px; text-transform: capitalize; color: var(--coffee); }
-.count { font-size: 13px; color: var(--sage); font-weight: 700; }
+.count { flex-shrink: 0; font-size: 13px; color: var(--sage); font-weight: 700; }
 .actions { display: flex; gap: 8px; }
-.segment { display: inline-flex; background: #f4ece4; border-radius: 12px; padding: 3px; gap: 3px; }
+.segment { display: inline-flex; background: #f4ece4; border-radius: 12px; padding: 3px; gap: 3px; flex-shrink: 0; }
 .seg { border: none; background: transparent; color: var(--muted); font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 14px; padding: 7px 16px; border-radius: 10px; cursor: pointer; transition: all .12s; }
 .seg.active-in { background: var(--sage); color: #fff; }
 .seg.active-out { background: var(--caramel); color: #fff; }
-.pref-btn { border: none; background: #fff; border: 1.5px dashed var(--line); color: var(--muted); font-size: 13px; padding: 9px 14px; border-radius: 12px; cursor: pointer; flex: 1; text-align: left; }
-.summary { font-size: 13px; margin: 8px 0 0; }
+.pref-btn { border: none; background: #fff; border: 1.5px dashed var(--line); color: var(--muted); font-size: 13px; padding: 9px 14px; border-radius: 12px; cursor: pointer; flex: 1; min-width: 0; text-align: left; overflow-wrap: anywhere; }
+.summary { font-size: 13px; margin: 8px 0 0; overflow-wrap: anywhere; }
 .summary.out { color: var(--caramel-deep); }
 .summary.pref { color: var(--muted); }
 .backdrop { position: fixed; inset: 0; background: rgba(74,52,39,.35); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; }

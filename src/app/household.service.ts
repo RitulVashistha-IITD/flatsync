@@ -112,4 +112,59 @@ export class HouseholdService {
             .subscribe();
     }
 
+    // Leave: remove ME from the household, forget my identity on this device.
+    async leaveHousehold(): Promise<void> {
+        const id = this.getIdentity();
+        if (!id) return;
+        await this.sb.client.from('members').delete().eq('id', id.memberId);
+        localStorage.removeItem('flatsync_identity');
+    }
+
+    // Delete: write a tombstone (so others learn who did it), then destroy
+    // the household. The cascade removes members, order_items, meal_marks.
+    async deleteHousehold(): Promise<void> {
+        const id = this.getIdentity();
+        if (!id) return;
+
+        await this.sb.client.from('deleted_households').insert({
+            household_id: id.householdId,
+            household_name: id.householdName,
+            deleted_by_name: id.name,
+        });
+
+        await this.sb.client.from('households').delete().eq('id', id.householdId);
+        localStorage.removeItem('flatsync_identity');
+    }
+
+    // On load: is my household still alive? If it was deleted, return who did it.
+    async checkHouseholdStatus(): Promise<{ alive: boolean; deletedBy?: string }> {
+        const id = this.getIdentity();
+        if (!id) return { alive: false };
+
+        const { data: house } = await this.sb.client
+            .from('households').select('id').eq('id', id.householdId).maybeSingle();
+        if (house) return { alive: true };
+
+        // gone — look up the tombstone for who deleted it
+        const { data: tomb } = await this.sb.client
+            .from('deleted_households').select('deleted_by_name')
+            .eq('household_id', id.householdId).maybeSingle();
+
+        return { alive: false, deletedBy: tomb?.deleted_by_name ?? 'someone' };
+    }
+
+    // Live: listen for this household being deleted.
+    subscribeToHousehold(householdId: string, onDeleted: () => void) {
+        return this.sb.client
+            .channel('household-' + householdId)
+            .on('postgres_changes',
+                { event: 'DELETE', schema: 'public', table: 'households', filter: 'id=eq.' + householdId },
+                () => onDeleted())
+            .subscribe();
+    }
+
+    clearIdentity(): void {
+        localStorage.removeItem('flatsync_identity');
+    }
+
 }

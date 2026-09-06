@@ -1,39 +1,39 @@
 <div class="add-row">
-    <input [(ngModel)]="newItem" (keyup.enter)="startAdd()" placeholder="Add an item…" />
-    <button class="add-btn" (click)="startAdd()">+</button>
-  </div>
-  
-  @if (items.length === 0) {
-    <p class="empty">Nothing on the list yet 🧺</p>
-  }
-  
-  <ul class="items">
-    @for (item of items; track item.id) {
-      <li [class.done]="item.status === 'ordered'">
-        <span class="tag" [class.personal]="item.category === 'personal'">{{ item.category }}</span>
-        <span class="name">
-          {{ item.name }}
-          @if (item.category === 'personal' && nameFor(item.added_by)) {
-            <span class="owner">· {{ nameFor(item.added_by) }}</span>
-          }
-        </span>
-        @if (item.status === 'needed') {
-          <button class="order-btn" (click)="order(item)">order</button>
-        } @else {
-          <span class="ordered">✓</span>
-        }
-        <button class="del" (click)="remove(item)">×</button>
-      </li>
+  <input [(ngModel)]="newItem" (keyup.enter)="startAdd()" placeholder="Add an item…" maxlength="60" />
+  <button class="add-btn" (click)="startAdd()">+</button>
+</div>
+
+@if (items.length === 0) {
+<p class="empty">Nothing on the list yet 🧺</p>
+}
+
+<ul class="items">
+  @for (item of items; track item.id) {
+  <li [class.done]="item.status === 'ordered'">
+    <span class="tag" [class.personal]="item.category === 'personal'">{{ item.category }}</span>
+    <span class="name">
+      {{ item.name }}
+      @if (item.category === 'personal' && nameFor(item.added_by)) {
+      <span class="owner">· {{ nameFor(item.added_by) }}</span>
+      }
+    </span>
+    @if (item.status === 'needed') {
+    <button class="order-btn" (click)="order(item)">order</button>
+    } @else {
+    <span class="ordered">✓</span>
     }
-  </ul>
-  
-  @if (showPopup) {
-    <div class="backdrop" (click)="cancel()">
-      <div class="popup" (click)="$event.stopPropagation()">
-        <p class="pq">"{{ pendingItem }}" is…</p>
-        <button class="btn primary" (click)="choose('common')">Common (shared)</button>
-        <button class="btn ghost" (click)="choose('personal')">Personal (mine)</button>
-        <button class="btn link" (click)="cancel()">cancel</button>
-      </div>
-    </div>
+    <button class="del" (click)="remove(item)">×</button>
+  </li>
   }
+</ul>
+
+@if (showPopup) {
+<div class="backdrop" (click)="cancel()">
+  <div class="popup" (click)="$event.stopPropagation()">
+    <p class="pq">"{{ pendingItem }}" is…</p>
+    <button class="btn primary" (click)="choose('common')">Common (shared)</button>
+    <button class="btn ghost" (click)="choose('personal')">Personal (mine)</button>
+    <button class="btn link" (click)="cancel()">cancel</button>
+  </div>
+</div>
+}

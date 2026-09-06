@@ -1,16 +1,72 @@
 .dash { max-width: 460px; margin: 0 auto; padding: 32px 18px 64px; }
+
+/* header */
 .top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .mascot { width: 64px; height: 64px; flex-shrink: 0; }
 .hi { font-family: 'Baloo 2', cursive; font-size: 22px; font-weight: 700; margin: 0; color: var(--caramel-deep); }
 .house { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+/* join code chip + copy */
 .code-chip { display: inline-flex; align-items: center; gap: 8px; background: var(--peach-soft); border-radius: 999px; padding: 7px 14px; font-size: 13px; color: var(--caramel-deep); margin-bottom: 16px; }
 .code-chip strong { letter-spacing: 3px; font-size: 15px; }
-.members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
-.chip { background: var(--sage-soft); color: var(--sage); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.feature-top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-.back { border: none; background: var(--card); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 14px; font-size: 20px; cursor: pointer; color: var(--coffee); box-shadow: 0 6px 16px rgba(166,108,58,.08); }
-.back:active { transform: scale(.94); }
-.feature-title { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 700; margin: 0; color: var(--coffee); }
 .copy { border: none; background: var(--caramel); color: #fff; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; margin-left: 4px; }
 .copy:active { transform: scale(.94); }
+
+/* member chips */
+.members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.chip { background: var(--sage-soft); color: var(--sage); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700; }
+
+/* feature tiles grid */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* feature view header (back button) */
+.feature-top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.back { border: 1px solid var(--line); background: var(--card); width: 40px; height: 40px; border-radius: 14px; font-size: 20px; cursor: pointer; color: var(--coffee); box-shadow: 0 6px 16px rgba(166,108,58,.08); }
+.back:active { transform: scale(.94); }
+.feature-title { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 700; margin: 0; color: var(--coffee); }
+
+/* tucked-away settings */
+.settings { display: flex; justify-content: center; gap: 14px; margin-top: 40px; }
+.settings-btn { border: none; background: none; font-size: 13px; cursor: pointer; padding: 6px 4px; font-weight: 600; }
+.settings-btn.leave { color: var(--muted); }
+.settings-btn.delete { color: #d99; }
+.settings-btn:hover { text-decoration: underline; }
+
+/* modal overlay: dim + blur + center */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 52, 39, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  animation: fadeIn .15s ease-out;
+}
+.drama {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px 20px;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(74, 52, 39, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: popIn .18s ease-out;
+}
+.drama-emoji { font-size: 34px; margin: 0; }
+.drama-title { font-family: 'Baloo 2', cursive; font-size: 18px; font-weight: 700; margin: 0; color: var(--coffee); }
+.drama-line { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 6px; }
+
+/* modal buttons */
+.btn { border: none; border-radius: 14px; padding: 12px; font-family: 'Baloo 2', cursive; font-size: 15px; font-weight: 600; cursor: pointer; }
+.danger { background: #d9534f; color: #fff; }
+.danger-soft { background: var(--peach-soft); color: var(--caramel-deep); }
+.link { background: none; color: var(--muted); font-weight: 500; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
