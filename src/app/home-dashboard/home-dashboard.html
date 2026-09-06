@@ -1,0 +1,55 @@
+<main class="dash">
+
+    @if (view === 'home') {
+      <header class="top">
+        <svg class="mascot" viewBox="0 0 88 88" aria-hidden="true">
+          <ellipse cx="44" cy="50" rx="30" ry="27" fill="#F3B98E"/>
+          <ellipse cx="44" cy="54" rx="20" ry="16" fill="#FCE4D4"/>
+          <path d="M20 30 Q16 14 30 22 Q24 28 20 30Z" fill="#F3B98E"/>
+          <path d="M68 30 Q72 14 58 22 Q64 28 68 30Z" fill="#F3B98E"/>
+          <path d="M23 29 Q21 20 28 23Z" fill="#E79B6B"/>
+          <path d="M65 29 Q67 20 60 23Z" fill="#E79B6B"/>
+          <circle cx="36" cy="46" r="3.2" fill="#4A3427"/>
+          <circle cx="52" cy="46" r="3.2" fill="#4A3427"/>
+          <circle cx="37.2" cy="45" r="1" fill="#fff"/>
+          <circle cx="53.2" cy="45" r="1" fill="#fff"/>
+          <path d="M41 52 Q44 55 47 52" fill="none" stroke="#4A3427" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="30" cy="52" r="3.5" fill="#F7C9A8" opacity=".7"/>
+          <circle cx="58" cy="52" r="3.5" fill="#F7C9A8" opacity=".7"/>
+        </svg>
+        <div>
+          <p class="hi">Hi {{ identity.name }} 🐾</p>
+          <p class="house">{{ identity.householdName }}</p>
+        </div>
+      </header>
+  
+      <div class="code-chip">
+        <span>Join code</span>
+        <strong>{{ identity.joinCode }}</strong>
+      </div>
+  
+      <div class="members">
+        @for (m of members; track m.id) {
+          <span class="chip">{{ m.name }}</span>
+        }
+      </div>
+  
+      <div class="grid">
+        <app-feature-card title="Order list" emoji="🧺" subtitle="what we need" (open)="openOrders()"></app-feature-card>
+        <app-feature-card title="Meal calendar" emoji="🍽️" subtitle="who's eating" [disabled]="true"></app-feature-card>
+      </div>
+    }
+  
+    @if (view === 'orders') {
+      <header class="feature-top">
+        <button class="back" (click)="goHome()">←</button>
+        <h2 class="feature-title">🧺 Order list</h2>
+      </header>
+      <app-order-list
+        [householdId]="identity.householdId"
+        [memberId]="identity.memberId"
+        [members]="members">
+      </app-order-list>
+    }
+  
+  </main>

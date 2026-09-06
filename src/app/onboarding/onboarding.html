@@ -1,0 +1,35 @@
+<main class="ob">
+    <h1 class="brand">FlatSync</h1>
+  
+    @if (mode === 'choose') {
+      <div class="card">
+        <p class="lead">Coordinate your flat, live 🏡</p>
+        <button class="btn primary" (click)="mode = 'create'">Create a household</button>
+        <button class="btn ghost" (click)="mode = 'join'">Join with a code</button>
+      </div>
+    }
+  
+    @if (mode === 'create') {
+      <div class="card">
+        <label>Household name</label>
+        <input [(ngModel)]="householdName" placeholder="e.g. Flat 302" />
+        <label>Your name</label>
+        <input [(ngModel)]="myName" placeholder="e.g. Ritul" />
+        <button class="btn primary" (click)="doCreate()" [disabled]="busy">{{ busy ? 'Creating…' : 'Create' }}</button>
+        <button class="btn link" (click)="mode='choose'; error=''">← back</button>
+        @if (error) { <p class="err">{{ error }}</p> }
+      </div>
+    }
+  
+    @if (mode === 'join') {
+      <div class="card">
+        <label>Join code</label>
+        <input [(ngModel)]="joinCode" placeholder="e.g. K7QP2M" />
+        <label>Your name</label>
+        <input [(ngModel)]="myName" placeholder="e.g. Ritul" />
+        <button class="btn primary" (click)="doJoin()" [disabled]="busy">{{ busy ? 'Joining…' : 'Join' }}</button>
+        <button class="btn link" (click)="mode='choose'; error=''">← back</button>
+        @if (error) { <p class="err">{{ error }}</p> }
+      </div>
+    }
+  </main>

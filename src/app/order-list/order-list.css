@@ -1,0 +1,23 @@
+.add-row { display: flex; gap: 8px; }
+.add-row input { flex: 1; border: 2px solid var(--line); background: #fff; border-radius: 14px; padding: 12px 14px; font: inherit; font-size: 15px; outline: none; }
+.add-row input:focus { border-color: var(--peach); }
+.add-btn { border: none; background: var(--caramel); color: #fff; width: 46px; border-radius: 14px; font-size: 22px; line-height: 1; cursor: pointer; }
+.empty { text-align: center; color: var(--muted); font-size: 14px; margin: 14px 0; }
+.items { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 8px; }
+.items li { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+.items li.done { opacity: .55; }
+.name { flex: 1; font-weight: 600; }
+.items li.done .name { text-decoration: line-through; }
+.owner { color: var(--muted); font-weight: 500; font-size: 13px; }
+.tag { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; background: var(--sage-soft); color: var(--sage); padding: 3px 8px; border-radius: 8px; font-weight: 800; }
+.tag.personal { background: var(--peach-soft); color: var(--caramel-deep); }
+.order-btn { border: none; background: var(--caramel); color: #fff; font-size: 12px; padding: 7px 12px; border-radius: 10px; cursor: pointer; font-weight: 700; }
+.ordered { color: var(--sage); font-weight: 800; }
+.del { border: none; background: none; color: #d8c4b5; font-size: 20px; cursor: pointer; padding: 0 4px; }
+.backdrop { position: fixed; inset: 0; background: rgba(74,52,39,.35); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
+.popup { background: var(--card); border-radius: 22px; padding: 24px; width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 20px 50px rgba(74,52,39,.2); }
+.pq { text-align: center; font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+.btn { border: none; border-radius: 14px; padding: 12px; font-family: 'Baloo 2', cursive; font-size: 15px; font-weight: 600; cursor: pointer; }
+.primary { background: var(--caramel); color: #fff; }
+.ghost { background: var(--peach-soft); color: var(--caramel-deep); }
+.link { background: none; color: var(--muted); font-weight: 500; }

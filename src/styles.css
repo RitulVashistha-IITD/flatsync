@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --bg: #FBF3EC;
+    --card: #FFFCF9;
+    --coffee: #4A3427;
+    --muted: #A98A76;
+    --peach: #F3B98E;
+    --peach-soft: #FCE4D4;
+    --caramel: #C68A5E;
+    --caramel-deep: #A96C3A;
+    --sage: #8FA97E;
+    --sage-soft: #E7EFE0;
+    --line: #F0E3D8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); font-family: 'Nunito', sans-serif; color: var(--coffee); }

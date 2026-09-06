@@ -1,154 +1,24 @@
-import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HouseholdService } from './household.service';
-import { OrderService, OrderItem } from './order.service';
+import { Onboarding } from './onboarding/onboarding';
+import { HomeDashboard } from './home-dashboard/home-dashboard';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, Onboarding, HomeDashboard],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit, OnDestroy {
-  mode: 'choose' | 'create' | 'join' = 'choose';
-  householdName = '';
-  myName = '';
-  joinCode = '';
-  error = '';
-  busy = false;
+export class App {
+  inHousehold = false;
 
-  identity: any = null;
-  members: { id: string; name: string }[] = [];
-  private memberSub: any = null;
-
-  items: OrderItem[] = [];
-  private itemSub: any = null;
-  newItem = '';
-  pendingItem = '';          // holds the typed name while the popup is open
-  showCategoryPopup = false;
-
-  constructor(
-    private household: HouseholdService,
-    private orders: OrderService,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.identity = this.household.getIdentity();
+  constructor(private household: HouseholdService) {
+    this.inHousehold = this.household.isInHousehold();
   }
 
-  ngOnInit() {
-    if (this.identity) this.loadMembers();
-  }
-
-  ngOnDestroy() {
-    if (this.memberSub) this.memberSub.unsubscribe();
-    if (this.itemSub) this.itemSub.unsubscribe();
-  }
-
-  async loadMembers() {
-    if (!this.identity) return;
-    this.members = await this.household.getMembers(this.identity.householdId);
-    this.cdr.detectChanges();
-
-    if (!this.memberSub) {
-      this.memberSub = this.household.subscribeToMembers(
-        this.identity.householdId,
-        async () => {
-          this.members = await this.household.getMembers(this.identity.householdId);
-          this.cdr.detectChanges();
-        }
-      );
-    }
-
-    this.loadItems();
-  }
-
-  async loadItems() {
-    if (!this.identity) return;
-    this.items = await this.orders.getItems(this.identity.householdId);
-    this.cdr.detectChanges();
-
-    if (!this.itemSub) {
-      this.itemSub = this.orders.subscribeToItems(
-        this.identity.householdId,
-        async () => {
-          this.items = await this.orders.getItems(this.identity.householdId);
-          this.cdr.detectChanges();
-        }
-      );
-    }
-  }
-
-  // Step 1 of adding: user typed a name and pressed add -> open the popup.
-  startAddItem() {
-    if (!this.newItem.trim()) return;
-    this.pendingItem = this.newItem.trim();
-    this.showCategoryPopup = true;
-  }
-
-  // Step 2: user picked personal or common in the popup.
-  async chooseCategory(category: 'personal' | 'common') {
-    if (!this.identity) return;
-    await this.orders.addItem(this.identity.householdId, this.pendingItem, category, this.identity.memberId);
-    this.newItem = '';
-    this.pendingItem = '';
-    this.showCategoryPopup = false;
-    this.cdr.detectChanges();
-    // the live subscription will refresh the list for everyone, including us
-  }
-
-  cancelAddItem() {
-    this.showCategoryPopup = false;
-    this.pendingItem = '';
-  }
-
-  async orderItem(item: OrderItem) {
-    await this.orders.markOrdered(item.id);
-  }
-
-  async removeItem(item: OrderItem) {
-    await this.orders.deleteItem(item.id);
-  }
-
-  async doCreate() {
-    if (!this.householdName.trim() || !this.myName.trim()) {
-      this.error = 'Please fill in both fields.';
-      return;
-    }
-    this.busy = true; this.error = '';
-    try {
-      this.identity = await this.household.createHousehold(this.householdName, this.myName);
-      this.cdr.detectChanges();
-      this.loadMembers();
-    } catch (e: any) {
-      this.error = 'Something went wrong. Try again.';
-    } finally {
-      this.busy = false;
-      this.cdr.detectChanges();
-    }
-  }
-
-  async doJoin() {
-    if (!this.joinCode.trim() || !this.myName.trim()) {
-      this.error = 'Please enter the code and your name.';
-      return;
-    }
-    this.busy = true; this.error = '';
-    try {
-      const result = await this.household.joinHousehold(this.joinCode, this.myName);
-      if (!result) {
-        this.error = 'No household found with that code.';
-      } else {
-        this.identity = result;
-        this.cdr.detectChanges();
-        this.loadMembers();
-      }
-    } catch (e: any) {
-      this.error = 'Something went wrong. Try again.';
-    } finally {
-      this.busy = false;
-      this.cdr.detectChanges();
-    }
+  onJoined() {
+    this.inHousehold = true;
   }
 }

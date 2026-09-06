@@ -1,0 +1,6 @@
+<button class="tile" [class.disabled]="disabled" (click)="!disabled && open.emit()">
+    <span class="tile-emoji">{{ emoji }}</span>
+    <span class="tile-title">{{ title }}</span>
+    @if (subtitle) { <span class="tile-sub">{{ subtitle }}</span> }
+    @if (disabled) { <span class="tile-soon">soon</span> }
+  </button>
