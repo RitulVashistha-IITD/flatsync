@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HouseholdService } from './household.service';
@@ -10,7 +10,7 @@ import { HouseholdService } from './household.service';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   mode: 'choose' | 'create' | 'join' = 'choose';
   householdName = '';
   myName = '';
@@ -19,9 +19,39 @@ export class App {
   busy = false;
 
   identity: any = null;
+  members: { id: string; name: string }[] = [];
+  private memberSub: any = null;
 
-  constructor(private household: HouseholdService, private cdr: ChangeDetectorRef) {
+  constructor(
+    private household: HouseholdService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.identity = this.household.getIdentity();
+  }
+
+  ngOnInit() {
+    if (this.identity) this.loadMembers();
+  }
+
+  ngOnDestroy() {
+    if (this.memberSub) this.memberSub.unsubscribe();
+  }
+
+  async loadMembers() {
+    if (!this.identity) return;
+    this.members = await this.household.getMembers(this.identity.householdId);
+    this.cdr.detectChanges();
+
+    // start listening for live changes (only once)
+    if (!this.memberSub) {
+      this.memberSub = this.household.subscribeToMembers(
+        this.identity.householdId,
+        async () => {
+          this.members = await this.household.getMembers(this.identity.householdId);
+          this.cdr.detectChanges();
+        }
+      );
+    }
   }
 
   async doCreate() {
@@ -33,10 +63,12 @@ export class App {
     try {
       this.identity = await this.household.createHousehold(this.householdName, this.myName);
       this.cdr.detectChanges();
+      this.loadMembers();
     } catch (e: any) {
       this.error = 'Something went wrong. Try again.';
     } finally {
       this.busy = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -48,12 +80,18 @@ export class App {
     this.busy = true; this.error = '';
     try {
       const result = await this.household.joinHousehold(this.joinCode, this.myName);
-      if (!result) { this.error = 'No household found with that code.'; }
-      else { this.identity = result; this.cdr.detectChanges(); }
+      if (!result) {
+        this.error = 'No household found with that code.';
+      } else {
+        this.identity = result;
+        this.cdr.detectChanges();
+        this.loadMembers();
+      }
     } catch (e: any) {
       this.error = 'Something went wrong. Try again.';
     } finally {
       this.busy = false;
+      this.cdr.detectChanges();
     }
   }
 }
